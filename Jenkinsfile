@@ -1,34 +1,56 @@
 pipeline {
-    agent any 
-    options {
-        buildDiscarder(LogRotator(numToKeepStr: '10'))
+  agent any
+  options {
+    // Only keep the 10 most recent builds
+    buildDiscarder(logRotator(numToKeepStr:'10'))
+  }
+  stages {
+    stage ('Install') {
+      steps {
+        // install required gems
+        sh 'bundle install'
+      }
     }
+    stage ('Build') {
+      steps {
+        // build
+        sh 'bundle exec rake build'
+      }
 
-    stages {
-        stage ('Build') {
-            steps {
-                sh 'bundle install'
-
-                sh 'bundle exec rake build spec'
-
-                archive includes: 'pkg/*.gem'
-
-
-                publishHTML target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: true,
-                    reportDir: 'coverage',
-                    reportFiles: 'index.html',
-                    reportName: 'RCov Report'
-
-                ]
-            }
+      post {
+        success {
+          // Archive the built artifacts
+          archive includes: 'pkg/*.gem'
         }
+      }
     }
-    post {
-        // Clean after build
-        always {
+    stage ('Test') {
+      steps {
+        // run tests with coverage
+        sh 'bundle exec rake spec'
+      }
+
+      post {
+        success {
+          // publish html
+          publishHTML target: [
+              allowMissing: false,
+              alwaysLinkToLastBuild: false,
+              keepAll: true,
+              reportDir: 'coverage',
+              reportFiles: 'index.html',
+              reportName: 'RCov Report'
+            ]
+        }
+      }
+    }
+  }
+  post {
+    always {
+      echo "Send notifications for result: ${currentBuild.result}"
+    }
+
+    always {
             cleanWs(cleanWhenNotBuilt: false,
                     deleteDirs: true,
                     disableDeferredWipeout: true,
@@ -36,5 +58,7 @@ pipeline {
                     patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
                                [pattern: '.propsfile', type: 'EXCLUDE']])
         }
-    }
+  }
+}
+   
 }
