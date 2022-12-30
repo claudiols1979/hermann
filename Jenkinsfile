@@ -53,16 +53,15 @@ pipeline {
   post {
     always {
       echo "Send notifications for result: ${currentBuild.result}"
-    }
-
-    always {
-            cleanWs(cleanWhenNotBuilt: false,
+      cleanWs(cleanWhenNotBuilt: false,
                     deleteDirs: true,
                     disableDeferredWipeout: true,
                     notFailBuild: true,
                     patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
                                [pattern: '.propsfile', type: 'EXCLUDE']])
-        }
+    }
+
+    
   }
 }
    
