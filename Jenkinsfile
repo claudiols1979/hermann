@@ -1,33 +1,29 @@
-#!groovy
+pipeline {
+    agent any 
+    options {
+        buildDiscarder(LogRotator(numToKeepStr: '10'))
+    }
 
-/* Only keep the 10 most recent builds. */
-properties([[$class: 'BuildDiscarderProperty',
-                strategy: [$class: 'LogRotator', numToKeepStr: '10']]])
+    stages {
+        stage ('Build') {
+            steps {
+                sh 'bundle install'
 
-stage ('Build') {
+                sh 'bundle exec rake build spec'
 
-  node {
-    // Checkout
-    checkout scm
+                archive includes: 'pkg/*.gem'
 
-    // install required bundles
-    sh 'bundle install'
 
-    // build and run tests with coverage
-    sh 'bundle exec rake build spec'
+                publishHTML target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: 'coverage',
+                    reportFiles: 'index.html',
+                    reportName: 'RCov Report'
 
-    // Archive the built artifacts
-    archive (includes: 'pkg/*.gem')
-
-    // publish html
-    publishHTML ([
-        allowMissing: false,
-        alwaysLinkToLastBuild: false,
-        keepAll: true,
-        reportDir: 'coverage',
-        reportFiles: 'index.html',
-        reportName: "RCov Report"
-      ])
-
-  }
+                ]
+            }
+        }
+    }
 }
