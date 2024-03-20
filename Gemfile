@@ -12,7 +12,7 @@ group :development do
   gem 'rake-compiler'
   gem 'pry'
 
-  #'~> 11.3.0'
+  #, '~> 11.3.0'
   # Used for testing `zk` gem based functionality
   gem 'zk', '~> 1.9.4'
 end
