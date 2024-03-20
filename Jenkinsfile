@@ -11,7 +11,7 @@ stage ('Build') {
     checkout scm
 
     // install required bundles
-    sh 'sudo gem install zookeeper -v '1.4.11''
+    sh 'sudo gem install zookeeper -v 1.4.11'
     sh 'sudo bundle install'
 
     // build and run tests with coverage
