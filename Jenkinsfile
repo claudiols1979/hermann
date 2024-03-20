@@ -11,6 +11,7 @@ stage ('Build') {
     checkout scm
 
     // install required bundles
+    sh 'export CFLAGS="-Wno-error=format-overflow"'
     sh 'sudo gem install zookeeper -v 1.4.11'
     sh 'sudo bundle install'
 
