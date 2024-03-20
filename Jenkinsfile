@@ -13,7 +13,7 @@ stage ('Build') {
     // install required bundles   
     sh 'CFLAGS=-Wno-error=format-overflow' 
     sh 'sudo gem install rails'
-    sh 'sudo gem install rake -v 13.0.6'
+    sh 'sudo gem install rake -v 13.0.6 --user-install'
     sh 'rake --version'
     sh 'sudo bundle config set without test development'
     sh 'sudo bundle install'
