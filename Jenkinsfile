@@ -14,6 +14,7 @@ stage ('Build') {
     sh 'CFLAGS=-Wno-error=format-overflow' 
     sh 'sudo gem install rails'
     sh 'sudo gem install rake'
+    sh 'rake --version'
     sh 'sudo bundle config set without test development'
     sh 'sudo bundle install'
 
