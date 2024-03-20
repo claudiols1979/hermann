@@ -10,7 +10,8 @@ stage ('Build') {
     // Checkout
     checkout scm
 
-    // install required bundles    
+    // install required bundles   
+    sh 'CFLAGS=-Wno-error=format-overflow' 
     sh 'sudo bundle install'
 
     // build and run tests with coverage
