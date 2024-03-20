@@ -12,7 +12,7 @@ stage ('Build') {
 
     // install required bundles   
     sh 'CFLAGS=-Wno-error=format-overflow' 
-    sh 'sudo bundle install --without test development'
+    sh 'bundle config set without test development'
 
     // build and run tests with coverage
     sh 'sudo bundle exec rake build spec'
