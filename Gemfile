@@ -4,7 +4,7 @@ gemspec
 
 group :development do
   gem 'jbundler', :platform => :jruby
-  gem 'rake', '~> 11.3.0'
+  gem 'rake', 
   gem 'i18n', '~> 0.6.11', :platform => :mri_18
   gem 'activesupport', '~> 3.x', :platform => :mri_18
   gem 'ruby-maven', '~> 3.1.1.0', :platform => :jruby
@@ -12,6 +12,7 @@ group :development do
   gem 'rake-compiler'
   gem 'pry'
 
+  #'~> 11.3.0'
   # Used for testing `zk` gem based functionality
   gem 'zk', '~> 1.9.4'
 end
